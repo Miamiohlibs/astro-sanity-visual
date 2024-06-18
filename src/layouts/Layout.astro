@@ -8,6 +8,8 @@ interface Props {
 const { title } = Astro.props;
 
 const visualEditingEnabled = import.meta.env.PUBLIC_SANITY_VISUAL_EDITING_ENABLED == 'true'
+
+export const prerender = true;`
 ---
 
 <!doctype html>

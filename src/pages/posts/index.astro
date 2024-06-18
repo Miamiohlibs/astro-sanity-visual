@@ -1,20 +1,43 @@
 ---
-// /blog/index.astro
+import { sanityClient } from "sanity:client";
+import Layout from '../../layouts/Layout.astro'
+import PortableText from '../../components/PortableText.astro'
+import SanityImage from '../../components/SanityImage.astro'
+
 import {loadQuery} from '../../load-query'
+
+export const prerender = true;
 
 const {data: posts} = await loadQuery<Array<{title: string}>>({
   query: `*[_type == 'post']`,
 })
 
+return posts.map((post: any) => ({
+    params: {slug: post.slug.current},
+    props: {post},
+  }))
+
 ---
 
-<h1>Blog</h1>
-<ul>
-  {posts.map((post) => (
-    <li>
-      <a href={'/posts/' + post.slug.current} class="post-link">
-        {post.title}
-      </a>
-    </li>
-  ))}
-</ul>
+<Layout title={post.title}>
+  <article>
+    <SanityImage node={post.coverImage} width="1000" />
+    <h1>{post.title}</h1>
+    <PortableText value={post.excerpt} />
+    <PortableText value={post.content} />
+  </article>
+</Layout>
+
+
+<style>
+
+article {
+  width: 800px;
+  margin: 1em auto;
+}
+article img {
+  width: 800px;
+  margin: 1em auto;
+}
+
+</style>
