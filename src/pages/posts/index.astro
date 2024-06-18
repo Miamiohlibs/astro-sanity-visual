@@ -1,0 +1,20 @@
+---
+// /blog/index.astro
+import {loadQuery} from '../../load-query'
+
+const {data: posts} = await loadQuery<Array<{title: string}>>({
+  query: `*[_type == 'post']`,
+})
+
+---
+
+<h1>Blog</h1>
+<ul>
+  {posts.map((post) => (
+    <li>
+      <a href={'/posts/' + post.slug.current} class="post-link">
+        {post.title}
+      </a>
+    </li>
+  ))}
+</ul>
